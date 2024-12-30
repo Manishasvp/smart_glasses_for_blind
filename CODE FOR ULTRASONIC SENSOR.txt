@@ -1,0 +1,67 @@
+#include <NewPing.h>
+
+// Define pins for each sensor
+#define TRIG_PIN_1 2
+#define ECHO_PIN_1 3
+#define TRIG_PIN_2 4
+#define ECHO_PIN_2 5
+#define TRIG_PIN_3 6
+#define ECHO_PIN_3 7
+
+// Define pins for buzzers
+#define BUZZER_PIN_1 8
+#define BUZZER_PIN_2 9
+#define BUZZER_PIN_3 10
+
+// Define distance threshold
+#define MAX_DISTANCE 200
+#define THRESHOLD_DISTANCE 5  // Set threshold distance to 5 cm
+
+// Create NewPing objects for each sensor
+NewPing sonar1(TRIG_PIN_1, ECHO_PIN_1, MAX_DISTANCE);
+NewPing sonar2(TRIG_PIN_2, ECHO_PIN_2, MAX_DISTANCE);
+NewPing sonar3(TRIG_PIN_3, ECHO_PIN_3, MAX_DISTANCE);
+
+void setup() {
+  Serial.begin(9600);  // Initialize serial communication for debugging
+  pinMode(BUZZER_PIN_1, OUTPUT);
+  pinMode(BUZZER_PIN_2, OUTPUT);
+  pinMode(BUZZER_PIN_3, OUTPUT);
+}
+
+void loop() {
+  // Get distance readings from each sensor
+  int distance1 = sonar1.ping_cm();
+  int distance2 = sonar2.ping_cm();
+  int distance3 = sonar3.ping_cm();
+
+  // Print distances to the serial monitor
+  Serial.print("Distance 1: ");
+  Serial.print(distance1);
+  Serial.print(" cm, Distance 2: ");
+  Serial.print(distance2);
+  Serial.print(" cm, Distance 3: ");
+  Serial.print(distance3);
+  Serial.println(" cm");
+
+  // Control buzzers based on distance
+  if (distance1 > 0 && distance1 <= THRESHOLD_DISTANCE) {
+    digitalWrite(BUZZER_PIN_1, HIGH);
+  } else {
+    digitalWrite(BUZZER_PIN_1, LOW);
+  }
+
+  if (distance2 > 0 && distance2 <= THRESHOLD_DISTANCE) {
+    digitalWrite(BUZZER_PIN_2, HIGH);
+  } else {
+    digitalWrite(BUZZER_PIN_2, LOW);
+  }
+
+  if (distance3 > 0 && distance3 <= THRESHOLD_DISTANCE) {
+    digitalWrite(BUZZER_PIN_3, HIGH);
+  } else {
+    digitalWrite(BUZZER_PIN_3, LOW);
+  }
+
+  delay(100);  // Wait before the next loop
+}
